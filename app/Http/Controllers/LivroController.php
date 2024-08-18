@@ -48,6 +48,7 @@ class LivroController extends Controller
             'titulo' => 'required|string|max:255',
             'autor' => 'required|string|max:255',
             'isbn' => 'required|string|max:255',
+            'editora' => 'required|string|max:255',
             'ano_publicacao' => 'required|integer',
             'quantidade_disponivel' => 'required|integer|min:0',
         ]);

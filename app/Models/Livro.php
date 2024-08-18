@@ -13,6 +13,7 @@ class Livro extends Model
         'titulo',
         'autor',
         'isbn',
+        'editora',
         'ano_publicacao',
         'quantidade_disponivel',
     ];    
