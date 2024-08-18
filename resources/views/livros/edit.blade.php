@@ -29,6 +29,10 @@
             <input type="text" name="isbn" id="isbn" value="{{ old('isbn', $livro->isbn) }}" class="form-control">
         </div>
         <div class="form-group">
+            <label for="editora">Editora</label>
+            <input type="text" name="editora" id="editora" value="{{ old('editora', $livro->editora) }}" class="form-control">
+        </div>
+        <div class="form-group">
             <label for="ano_publicacao">Ano de Publicação</label>
             <input type="number" name="ano_publicacao" id="ano_publicacao" value="{{ old('ano_publicacao', $livro->ano_publicacao) }}" class="form-control">
         </div>
