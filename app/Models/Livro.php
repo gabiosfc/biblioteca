@@ -16,6 +16,15 @@ class Livro extends Model
         'editora',
         'ano_publicacao',
         'quantidade_disponivel',
-    ];    
+    ];
+    /**
+     * Define o relacionamento entre Livro e Emprestimo.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function emprestimos()
+    {
+        return $this->hasMany(Emprestimo::class);
+    }    
 }
 

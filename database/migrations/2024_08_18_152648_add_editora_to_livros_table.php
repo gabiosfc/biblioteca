@@ -12,9 +12,13 @@ return new class extends Migration
     public function up()
     {
         Schema::table('livros', function (Blueprint $table) {
-            $table->string('editora')->after('isbn');
+            // Verifique se a coluna já existe antes de adicionar
+            if (!Schema::hasColumn('livros', 'editora')) {
+                $table->string('editora')->after('isbn');
+            }
         });
     }
+
 
     /**
      * Reverse the migrations.

@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LivroController;
+use App\Http\Controllers\EmprestimoController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +17,6 @@ use App\Http\Controllers\LivroController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::resource('livros', LivroController::class)->middleware('auth');
 Route::get('/', function () {
     return view('welcome');
 });
@@ -26,8 +27,11 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::resource('/products', ProductController::class)->middleware('role:Administrator');
-    Route::resource('/livros', LivroController::class)->middleware('auth');
+    Route::get('/livrosDisponiveis', [EmprestimoController::class, 'livrosDisponiveis'])->name('livros.disponiveis');
+    Route::post('/emprestimos', [EmprestimoController::class, 'store'])->name('emprestimos.store');
+    Route::post('/emprestimos/devolucao', [EmprestimoController::class, 'devolucao'])->name('emprestimos.devolucao');
+    Route::get('/emprestimosUsuario', [EmprestimoController::class, 'usuario'])->name('emprestimos.index');
+    Route::resource('/livros', LivroController::class)->middleware('role:Administrator');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
