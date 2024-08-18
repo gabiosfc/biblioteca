@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('autor');
             $table->string('isbn')->unique();
             $table->string('editora');
-            $table->year('ano_publicacao');
+            $table->integer('ano_publicacao');
             $table->boolean('disponivel')->default(true);
             $table->timestamps();
         });

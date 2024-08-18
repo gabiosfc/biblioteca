@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -13,39 +12,54 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    private $permissions_product = [
-        'product-list',
-        'product-create',
-        'product-edit',
-        'product-delete',
-    ];
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
+        // Seeding users
         $this->call([UserSeeder::class]);
-        $this->call([ProductSeeder::class]);
 
-        foreach ($this->permissions_product as $permission) {
+        // Seeding permissions
+        $permissions = [
+            'user-list',
+            'user-create',
+            'user-edit',
+            'user-delete',
+        ];
+
+        foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
         }
 
         $adminRole = Role::create(['name' => 'Administrator']);
         $managerRole = Role::create(['name' => 'Manager']);
 
-        foreach( Permission::all() as $permission){
+        foreach (Permission::all() as $permission) {
             $permission->assignRole($adminRole);
         }
- 
-        $adminUser = User::where('email', '=', 'usera@example.com')->first();
+
+        // Verifica se o usuário já existe antes de atribuir o papel
+        $adminUser = User::firstOrCreate(
+            ['email' => 'usera@example.com'],
+            [
+                'name' => 'UserA',
+                'email_verified_at' => now(),
+                'password' => bcrypt('password'), // Mude para a senha que preferir
+                'remember_token' => \Str::random(10),
+            ]
+        );
         $adminUser->assignRole('Administrator');
 
-        $adminUser = User::where('email', '=', 'userb@example.com')->first();
-        $adminUser->assignRole('Manager');
+        $managerUser = User::firstOrCreate(
+            ['email' => 'userb@example.com'],
+            [
+                'name' => 'UserB',
+                'email_verified_at' => now(),
+                'password' => bcrypt('password'), // Mude para a senha que preferir
+                'remember_token' => \Str::random(10),
+            ]
+        );
+        $managerUser->assignRole('Manager');
+
+        // Seeding livros
+        $this->call([LivroSeeder::class]);
     }
 }
