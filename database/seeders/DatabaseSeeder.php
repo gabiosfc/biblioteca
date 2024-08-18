@@ -26,12 +26,23 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::updateOrCreate(
+                ['name' => $permission],
+                ['guard_name' => 'web']
+            );
         }
 
-        $adminRole = Role::create(['name' => 'Administrator']);
-        $managerRole = Role::create(['name' => 'Manager']);
+        // Seeding roles
+        $adminRole = Role::updateOrCreate(
+            ['name' => 'Administrator'],
+            ['guard_name' => 'web']
+        );
+        $managerRole = Role::updateOrCreate(
+            ['name' => 'Manager'],
+            ['guard_name' => 'web']
+        );
 
+        // Assigning permissions to roles
         foreach (Permission::all() as $permission) {
             $permission->assignRole($adminRole);
         }

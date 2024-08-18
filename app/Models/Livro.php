@@ -13,9 +13,8 @@ class Livro extends Model
         'titulo',
         'autor',
         'isbn',
-        'editora',
         'ano_publicacao',
-        'disponivel', 
-    ];
+        'quantidade_disponivel',
+    ];    
 }
 

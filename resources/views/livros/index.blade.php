@@ -18,7 +18,7 @@
                 <th>Autor</th>
                 <th>ISBN</th>
                 <th>Ano de Publicação</th>
-                <th>Disponível</th>
+                <th>Quantidade Disponível</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -30,7 +30,7 @@
                     <td>{{ $livro->autor }}</td>
                     <td>{{ $livro->isbn }}</td>
                     <td>{{ $livro->ano_publicacao }}</td>
-                    <td>{{ $livro->disponivel ? 'Sim' : 'Não' }}</td>
+                    <td>{{ $livro->quantidade_disponivel }}</td>
                     <td>
                         <a href="{{ route('livros.show', $livro->id) }}" class="btn btn-info btn-sm">Ver</a>
                         <a href="{{ route('livros.edit', $livro->id) }}" class="btn btn-warning btn-sm">Editar</a>
@@ -44,4 +44,5 @@
             @endforeach
         </tbody>
     </table>
+
 @endsection

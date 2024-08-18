@@ -25,7 +25,7 @@ class LivroController extends Controller
             'autor' => 'required|string|max:255',
             'isbn' => 'required|string|max:255',
             'ano_publicacao' => 'required|integer',
-            'disponivel' => 'required|boolean',
+            'quantidade_disponivel' => 'required|integer|min:0',
         ]);
 
         Livro::create($request->all());
@@ -49,7 +49,7 @@ class LivroController extends Controller
             'autor' => 'required|string|max:255',
             'isbn' => 'required|string|max:255',
             'ano_publicacao' => 'required|integer',
-            'disponivel' => 'required|boolean',
+            'quantidade_disponivel' => 'required|integer|min:0',
         ]);
 
         $livro->update($request->all());

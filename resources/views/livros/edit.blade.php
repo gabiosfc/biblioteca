@@ -9,7 +9,7 @@
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
-            @endforeach
+            </ul>
         </div>
     @endif
 
@@ -17,32 +17,25 @@
         @csrf
         @method('PUT')
         <div class="form-group">
-            <label for="titulo">Título:</label>
-            <input type="text" name="titulo" id="titulo" class="form-control" value="{{ $livro->titulo }}" required>
+            <label for="titulo">Título</label>
+            <input type="text" name="titulo" id="titulo" value="{{ old('titulo', $livro->titulo) }}" class="form-control">
         </div>
         <div class="form-group">
-            <label for="autor">Autor:</label>
-            <input type="text" name="autor" id="autor" class="form-control" value="{{ $livro->autor }}" required>
+            <label for="autor">Autor</label>
+            <input type="text" name="autor" id="autor" value="{{ old('autor', $livro->autor) }}" class="form-control">
         </div>
         <div class="form-group">
-            <label for="isbn">ISBN:</label>
-            <input type="text" name="isbn" id="isbn" class="form-control" value="{{ $livro->isbn }}" required>
+            <label for="isbn">ISBN</label>
+            <input type="text" name="isbn" id="isbn" value="{{ old('isbn', $livro->isbn) }}" class="form-control">
         </div>
         <div class="form-group">
-            <label for="editora">Editora:</label>
-            <input type="text" name="editora" id="editora" class="form-control" value="{{ $livro->editora }}" required>
+            <label for="ano_publicacao">Ano de Publicação</label>
+            <input type="number" name="ano_publicacao" id="ano_publicacao" value="{{ old('ano_publicacao', $livro->ano_publicacao) }}" class="form-control">
         </div>
         <div class="form-group">
-            <label for="ano_publicacao">Ano de Publicação:</label>
-            <input type="number" name="ano_publicacao" id="ano_publicacao" class="form-control" value="{{ $livro->ano_publicacao }}" required>
+            <label for="quantidade_disponivel">Quantidade Disponível</label>
+            <input type="number" name="quantidade_disponivel" id="quantidade_disponivel" value="{{ old('quantidade_disponivel', $livro->quantidade_disponivel) }}" class="form-control">
         </div>
-        <div class="form-group">
-            <label for="disponivel">Disponível:</label>
-            <select name="disponivel" id="disponivel" class="form-control">
-                <option value="1" {{ $livro->disponivel ? 'selected' : '' }}>Sim</option>
-                <option value="0" {{ !$livro->disponivel ? 'selected' : '' }}>Não</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-success mt-3">Atualizar</button>
+        <button type="submit" class="btn btn-primary">Atualizar</button>
     </form>
 @endsection

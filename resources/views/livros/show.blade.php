@@ -12,7 +12,7 @@
             <p><strong>ISBN:</strong> {{ $livro->isbn }}</p>
             <p><strong>Editora:</strong> {{ $livro->editora }}</p>
             <p><strong>Ano de Publicação:</strong> {{ $livro->ano_publicacao }}</p>
-            <p><strong>Disponível:</strong> {{ $livro->disponivel ? 'Sim' : 'Não' }}</p>
+            <p><strong>Quantidade Disponível:</strong> {{ $livro->quantidade_disponivel }}</p>
             <a href="{{ route('livros.index') }}" class="btn btn-primary">Voltar à Lista</a>
         </div>
     </div>
