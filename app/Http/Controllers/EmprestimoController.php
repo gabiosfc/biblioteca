@@ -90,9 +90,14 @@ class EmprestimoController extends Controller
         $livro = Livro::findOrFail($emprestimo->livro_id);
         $livro->increment('quantidade_disponivel');
 
-        return redirect()->route('emprestimos.index')->with('success', 'Livro devolvido com sucesso!');
+        $message = 'Livro devolvido com sucesso!';
+        if ($multa > 0) {
+            $message .= ' Você tem uma multa de R$' . number_format($multa, 2);
+        }
 
+        return redirect()->route('emprestimos.index')->with('alert', $message);
     }
+
 
     public function usuario()
     {

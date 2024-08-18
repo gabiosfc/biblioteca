@@ -13,16 +13,17 @@
         </div>
     @endif
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
+    @if (session('alert'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    title: 'Aviso',
+                    text: '{{ session('alert') }}',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
     @endif
 
     <table class="table">
@@ -56,5 +57,4 @@
         </tbody>
     </table>
     <a href="{{ route('livros.disponiveis') }}" class="btn btn-primary">Voltar para Livros Disponíveis</a>
-
 @endsection
