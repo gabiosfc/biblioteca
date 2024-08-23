@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
     <h1>Adicionar Novo Livro</h1>
@@ -15,6 +15,9 @@
 
     <form action="{{ route('livros.store') }}" method="POST">
         @csrf
+        <br>
+        <br>
+        <br>
         <div class="form-group">
             <label for="titulo">Título</label>
             <input type="text" name="titulo" id="titulo" class="form-control">

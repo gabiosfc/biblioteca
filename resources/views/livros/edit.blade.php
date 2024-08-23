@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.master')
+
 
 @section('content')
     <h1>Editar Livro</h1>
+
 
     @if ($errors->any())
         <div class="alert alert-danger">

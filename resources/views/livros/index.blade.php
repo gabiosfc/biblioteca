@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
-    <h1>Livros</h1>
+    <br>
     <a href="{{ route('livros.create') }}" class="btn btn-primary mb-3">Adicionar Novo Livro</a>
 
     @if (session('success'))

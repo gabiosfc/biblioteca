@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.master')
+
 
 @section('content')
     <h1>Detalhes do Livro</h1>
+    <p> </p>
 
     <div class="card">
         <div class="card-header">

@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.master')
+
 
 @section('content')
     <h1>Gerenciar Empréstimos</h1>
+    <p> </p>
 
     @if (session('success'))
         <div class="alert alert-success">
