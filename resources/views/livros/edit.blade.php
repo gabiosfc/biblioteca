@@ -1,9 +1,7 @@
 @extends('layouts.master')
 
-
 @section('content')
     <h1>Editar Livro</h1>
-
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -31,8 +29,14 @@
             <input type="text" name="isbn" id="isbn" value="{{ old('isbn', $livro->isbn) }}" class="form-control">
         </div>
         <div class="form-group">
-            <label for="editora">Editora</label>
-            <input type="text" name="editora" id="editora" value="{{ old('editora', $livro->editora) }}" class="form-control">
+            <label for="editora_id">Editora</label>
+            <select name="editora_id" id="editora_id" class="form-control">
+                @foreach($editoras as $editora)
+                    <option value="{{ $editora->id }}" {{ old('editora_id', $livro->editora_id) == $editora->id ? 'selected' : '' }}>
+                        {{ $editora->nome }}
+                    </option>
+                @endforeach
+            </select>
         </div>
         <div class="form-group">
             <label for="ano_publicacao">Ano de Publicação</label>

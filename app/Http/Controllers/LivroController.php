@@ -2,61 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Emprestimo;
+use App\Models\Editora;
 use App\Models\Livro;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
-class EmprestimoController extends Controller
-{
-    public function index()
-    {
-        $livros = Livro::where('quantidade_disponivel', '>', 0)->get();
-        return view('emprestimos.index', compact('livros'));
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'livro_id' => 'required|exists:livros,id',
-        ]);
-
-        $livro = Livro::findOrFail($request->livro_id);
-
-        if ($livro->quantidade_disponivel <= 0) {
-            return redirect()->route('emprestimos.index')->with('error', 'Não há livros disponíveis para empréstimo.');
-        }
-
-        $emprestimo = Emprestimo::create([
-            'user_id' => Auth::id(),
-            'livro_id' => $request->livro_id,
-            'data_emprestimo' => now(),
-        ]);
-
-        $livro->decrement('quantidade_disponivel');
-
-        return redirect()->route('emprestimos.index')->with('success', 'Empréstimo realizado com sucesso!');
-    }
-
-    public function devolucao($id)
-    {
-        $emprestimo = Emprestimo::findOrFail($id);
-        $emprestimo->data_devolucao = now();
-
-        $dataLimite = $emprestimo->data_emprestimo->addDays(5);
-        if (now()->greaterThan($dataLimite)) {
-            $diasAtraso = now()->diffInDays($dataLimite);
-            $emprestimo->multa = $diasAtraso * 0.10;
-        }
-
-        $emprestimo->save();
-
-        $livro = $emprestimo->livro;
-        $livro->increment('quantidade_disponivel');
-
-        return redirect()->route('emprestimos.index')->with('success', 'Devolução registrada com sucesso!');
-    }
-}
 
 class LivroController extends Controller
 {
@@ -68,23 +16,63 @@ class LivroController extends Controller
 
     public function create()
     {
-        return view('livros.create');
+        $editoras = Editora::all(); // Adiciona a lista de editoras para a view
+        return view('livros.create', compact('editoras'));
     }
 
     public function store(Request $request)
     {
+        // Validação inicial dos campos do livro
         $request->validate([
             'titulo' => 'required|string|max:255',
             'autor' => 'required|string|max:255',
-            'isbn' => 'required|string|max:255',
-            'editora' => 'required|string|max:255',
-            'ano_publicacao' => 'required|integer',
+            'isbn' => 'required|string|max:255|unique:livros,isbn',
+            'ano_publicacao' => 'required|integer|digits:4',
             'quantidade_disponivel' => 'required|integer|min:0',
+            'nova_editora_nome' => 'nullable|string|max:255',
+        ], [
+            'isbn.unique' => 'O ISBN já está cadastrado. Por favor, insira um ISBN diferente.',
+            'ano_publicacao.digits' => 'O ano de publicação deve ter exatamente 4 dígitos.',
+            'editora_id.required_without' => 'Você deve selecionar uma editora existente ou adicionar uma nova editora.',
         ]);
 
+        // Cria ou recupera a nova editora, se necessário
+        if ($request->filled('nova_editora_nome')) {
+            // Verifica se a editora já existe
+            $novaEditora = Editora::where('nome', $request->nova_editora_nome)->first();
+            
+            // Se a editora não existir, cria uma nova editora
+            if (!$novaEditora) {
+                $novaEditora = Editora::create(['nome' => $request->nova_editora_nome]);
+            }
+            
+            // Atualiza o campo editora_id com o ID da nova editora
+            $editoraId = $novaEditora->id;
+        } else {
+            // Se uma editora existente foi selecionada
+            $editoraId = $request->input('editora_id');
+
+            // Se nenhuma editora foi selecionada e nenhuma nova editora foi fornecida
+            if (!$editoraId) {
+                return redirect()->back()->withErrors(['editora_id' => 'A editora é obrigatória.'])->withInput();
+            }
+        }
+
+        // Atualiza o request com o editora_id correto
+        $request->merge(['editora_id' => $editoraId]);
+
+        // Validação final incluindo editora_id
+        $request->validate([
+            'editora_id' => 'required|exists:editoras,id',
+        ]);
+
+        // Cria o livro com os dados fornecidos
         Livro::create($request->all());
+
         return redirect()->route('livros.index')->with('success', 'Livro adicionado com sucesso!');
     }
+
+
 
     public function show(Livro $livro)
     {
@@ -93,7 +81,8 @@ class LivroController extends Controller
 
     public function edit(Livro $livro)
     {
-        return view('livros.edit', compact('livro'));
+        $editoras = Editora::all(); // Adiciona a lista de editoras para a view
+        return view('livros.edit', compact('livro', 'editoras'));
     }
 
     public function update(Request $request, Livro $livro)
@@ -102,7 +91,7 @@ class LivroController extends Controller
             'titulo' => 'required|string|max:255',
             'autor' => 'required|string|max:255',
             'isbn' => 'required|string|max:255',
-            'editora' => 'required|string|max:255',
+            'editora_id' => 'required|exists:editoras,id', // Atualizado para usar editora_id
             'ano_publicacao' => 'required|integer',
             'quantidade_disponivel' => 'required|integer|min:0',
         ]);

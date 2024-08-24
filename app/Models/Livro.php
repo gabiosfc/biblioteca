@@ -13,10 +13,11 @@ class Livro extends Model
         'titulo',
         'autor',
         'isbn',
-        'editora',
+        'editora_id',  // Alterado para refletir a chave estrangeira
         'ano_publicacao',
         'quantidade_disponivel',
     ];
+
     /**
      * Define o relacionamento entre Livro e Emprestimo.
      *
@@ -25,6 +26,15 @@ class Livro extends Model
     public function emprestimos()
     {
         return $this->hasMany(Emprestimo::class);
-    }    
-}
+    }
 
+    /**
+     * Define o relacionamento entre Livro e Editora.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function editora()
+    {
+        return $this->belongsTo(Editora::class);
+    }
+}

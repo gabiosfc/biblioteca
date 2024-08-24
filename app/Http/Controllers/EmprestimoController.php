@@ -54,7 +54,6 @@ class EmprestimoController extends Controller
         return view('livros.disponiveis', compact('livros'));
     }
 
-
     public function devolucao(Request $request)
     {
         $request->validate([
@@ -70,9 +69,9 @@ class EmprestimoController extends Controller
         }
 
         // Calcula a multa se houver atraso
-        $dataDevolucao = Carbon::now()->toDateString();
+        $dataDevolucao = Carbon::now();
         $dataEmprestimo = Carbon::parse($emprestimo->data_emprestimo);
-        $diasAtraso = $dataEmprestimo->diffInDays($dataDevolucao) - 5;
+        $diasAtraso = $dataDevolucao->diffInDays($dataEmprestimo->addDays(5));
 
         if ($diasAtraso > 0) {
             $multa = $diasAtraso * 0.10; // R$0,10 por dia de atraso
@@ -82,7 +81,7 @@ class EmprestimoController extends Controller
 
         // Atualiza o empréstimo
         $emprestimo->update([
-            'data_devolucao' => $dataDevolucao,
+            'data_devolucao' => $dataDevolucao->toDateString(),
             'multa' => $multa,
         ]);
 
@@ -98,7 +97,6 @@ class EmprestimoController extends Controller
         return redirect()->route('emprestimos.index')->with('alert', $message);
     }
 
-
     public function usuario()
     {
         // Lista os empréstimos do usuário com o livro associado
@@ -109,5 +107,4 @@ class EmprestimoController extends Controller
 
         return view('emprestimos.usuario', compact('emprestimos'));
     }
-
 }
